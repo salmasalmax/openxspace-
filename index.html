@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Open Space</title>
+<meta name="description" content="An anonymous space for teens to share how they feel and find support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#232046; --soft:#5d5a7a; --paper:#fbfaff; --card:#ffffff; --line:#e3e0f3;
+  --indigo:#5b4fd9; --indigo-dark:#4439b8; --tint:#efecff;
+  --head:'Bricolage Grotesque','Trebuchet MS',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--body);color:var(--ink);background:var(--tint);line-height:1.6;transition:background .6s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+:focus-visible{outline:3px solid var(--indigo);outline-offset:3px;border-radius:8px}
+h1,h2,h3{font-family:var(--head);line-height:1.1;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;max-width:760px;margin:0 auto}
+.logo{font-family:var(--head);font-weight:800;font-size:1.25rem;text-decoration:none;color:var(--ink)}
+.helpbtn{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:10px 18px;font:700 .95rem var(--body);text-decoration:none;cursor:pointer}
+.helpbtn:hover{background:var(--indigo-dark)}
+.hero{padding:36px 0 28px}
+.hero h1{font-size:clamp(2.2rem,8vw,3.6rem);font-weight:800;max-width:14ch}
+.hero p{font-size:1.1rem;color:var(--soft);max-width:46ch;margin:14px 0 0}
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+@media(min-width:620px){.moods{grid-template-columns:repeat(6,1fr)}}
+.mood{background:var(--card);border:2px solid transparent;border-radius:26px 26px 26px 10px;padding:16px 6px;font:700 .95rem var(--body);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .2s,border-color .2s}
+.mood span{font-size:2rem;line-height:1}
+.mood:hover{transform:translateY(-3px)}
+.mood[aria-pressed=true]{border-color:var(--indigo);transform:translateY(-3px) rotate(-2deg)}
+section{padding:30px 0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+.panel h2{font-size:1.5rem;margin-bottom:6px}
+.sub{color:var(--soft);margin:0 0 14px}
+textarea{width:100%;min-height:120px;border:2px solid var(--line);border-radius:14px;padding:14px;font:1rem var(--body);color:var(--ink);resize:vertical;background:var(--paper)}
+textarea:focus{border-color:var(--indigo);outline:none}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.who{color:var(--soft);font-size:.95rem}
+.btn{background:var(--indigo);color:#fff;border:0;border-radius:999px;padding:12px 24px;font:700 1rem var(--body);cursor:pointer}
+.btn:hover{background:var(--indigo-dark)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.feed{display:grid;gap:14px;margin-top:16px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.post .meta{display:flex;justify-content:space-between;color:var(--soft);font-size:.9rem;margin-bottom:6px}
+.post p{margin:0 0 12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.acts{display:flex;gap:10px}
+.mini{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font:700 .9rem var(--body);color:var(--ink);cursor:pointer}
+.mini:hover{border-color:var(--indigo)}
+.mini.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.alert{display:none;background:#fff4ec;border:2px solid #f0a875;border-radius:18px;padding:18px;margin-top:14px}
+.alert.show{display:block}
+.alert h3{font-size:1.2rem;margin-bottom:6px}
+.help{display:grid;gap:12px;margin-top:14px}
+.help div{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px}
+.help a{font:800 1.3rem var(--head);color:var(--indigo-dark);text-decoration:none}
+.help small{display:block;color:var(--soft)}
+.note{font-size:.9rem;color:var(--soft);margin-top:14px}
+footer{padding:30px 0 50px;color:var(--soft);font-size:.9rem}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#top">Open Space</a>
+  <a class="helpbtn" href="#help">Need help now</a>
+</header>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <h1>How are you feeling today?</h1>
+    <p>A space for teens to share what's going on, no name needed. Pick a feeling to start.</p>
+    <div class="moods" id="moods" role="group" aria-label="Pick how you feel"></div>
+  </div>
+
+  <section id="share" aria-live="polite">
+    <div class="panel">
+      <h2 id="shareTitle">Share what's on your mind</h2>
+      <p class="sub" id="shareSub">Pick a feeling above, then write as much or as little as you want.</p>
+      <label for="msg" class="who">Your post is anonymous. You'll post as <b id="alias"></b>.</label>
+      <textarea id="msg" maxlength="500" placeholder="Write here..." aria-describedby="count"></textarea>
+      <div class="row">
+        <span class="who" id="count">0 / 500</span>
+        <button class="btn" id="post" disabled>Share anonymously</button>
+      </div>
+      <div class="alert" id="alert" role="alert">
+        <h3>We're glad you said something.</h3>
+        <p>Some of your words sound really heavy. Your post is shared, but please talk to someone who can help right now. You don't have to do this alone.</p>
+        <a class="helpbtn" href="#help">See who to call</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="feed">
+    <h2>From other teens</h2>
+    <p class="sub">Tap "Me too" to let someone know they're not alone.</p>
+    <div class="feed" id="list"></div>
+  </section>
+
+  <section id="help">
+    <div class="panel">
+      <h2>Need to talk to someone?</h2>
+      <p class="sub">These are free. If you are in danger right now, call 999.</p>
+      <div class="help">
+        <div><a href="tel:8004673">800 4673 (800 HOPE)</a><small>National mental support line, Arabic and English, also on WhatsApp</small></div>
+        <div><a href="tel:800725462">800 725462 (800 SAKINA)</a><small>Abu Dhabi mental health line, 24/7</small></div>
+        <div><a href="tel:116111">116111</a><small>Child Protection Centre, if you or someone you know is being hurt</small></div>
+        <div><a href="tel:999">999</a><small>Emergency</small></div>
+      </div>
+      <p class="note">You can also talk to your school counselor or a trusted adult.</p>
+    </div>
+  </section>
+
+  <footer>
+    Open Space is a student project, not a medical service. It can't replace a counselor or doctor.
+  </footer>
+</main>
+
+<script>
+const MOODS=[
+  {k:'great',e:'😄',t:'Great',c:'#e6f7ee'},
+  {k:'okay',e:'🙂',t:'Okay',c:'#eaf3ff'},
+  {k:'stressed',e:'😣',t:'Stressed',c:'#fff1e3'},
+  {k:'anxious',e:'😰',t:'Anxious',c:'#f1ecff'},
+  {k:'sad',e:'😢',t:'Sad',c:'#e6eefb'},
+  {k:'overwhelmed',e:'😵‍💫',t:'Overwhelmed',c:'#fbe9f0'}
+];
+const SEED=[
+  {id:'s1',mood:'stressed',text:'Exam season is here and everyone seems to have it figured out except me.',alias:'Quiet Comet',me:12,example:true},
+  {id:'s2',mood:'okay',text:'Had a rough week but talking to my friend about it actually helped.',alias:'Calm Falcon',me:8,example:true}
+];
+const WORDS=['kill myself','suicide','suicidal','end it all','end my life','want to die','hurt myself','self harm','self-harm','cut myself','no reason to live',"don't want to be here"];
+const A1=['Quiet','Gentle','Brave','Sunny','Misty','Cozy','Bright','Calm'];
+const A2=['Comet','Falcon','River','Lantern','Cloud','Pebble','Willow','Otter'];
+const $=id=>document.getElementById(id);
+let mood=null;
+const alias=A1[Math.floor(Math.random()*8)]+' '+A2[Math.floor(Math.random()*8)];
+$('alias').textContent=alias;
+
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let posts=load('os_posts',[]);
+let liked=load('os_liked',{});
+let hidden=load('os_hidden',{});
+
+$('moods').innerHTML=MOODS.map(m=>`<button class="mood" data-k="${m.k}" aria-pressed="false"><span>${m.e}</span>${m.t}</button>`).join('');
+$('moods').addEventListener('click',e=>{
+  const b=e.target.closest('.mood');if(!b)return;
+  mood=MOODS.find(m=>m.k===b.dataset.k);
+  document.querySelectorAll('.mood').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  document.body.style.background=mood.c;
+  $('shareTitle').textContent='Feeling '+mood.t.toLowerCase()+'? Tell us more.';
+  $('shareSub').textContent='You can write as much or as little as you want.';
+  $('msg').focus();check();
+});
+function check(){$('post').disabled=!(mood&&$('msg').value.trim().length>0)}
+$('msg').addEventListener('input',()=>{$('count').textContent=$('msg').value.length+' / 500';check()});
+
+$('post').addEventListener('click',()=>{
+  const text=$('msg').value.trim();if(!text||!mood)return;
+  const low=text.toLowerCase();
+  const flag=WORDS.some(w=>low.includes(w));
+  posts.unshift({id:'p'+Date.now(),mood:mood.k,text,alias,me:0});
+  save('os_posts',posts);
+  $('msg').value='';$('count').textContent='0 / 500';check();
+  $('alert').classList.toggle('show',flag);
+  render();
+  if(flag)$('alert').scrollIntoView({behavior:'smooth',block:'center'});
+});
+
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+  const all=[...posts,...SEED].filter(p=>!hidden[p.id]);
+  $('list').innerHTML=all.map(p=>{
+    const m=MOODS.find(x=>x.k===p.mood)||MOODS[1];
+    const on=liked[p.id];
+    return `<article class="post"><div class="meta"><span>${m.e} ${esc(p.alias)}</span><span>${p.example?'Example post':'You posted this'}</span></div>
+    <p>${esc(p.text)}</p>
+    <div class="acts"><button class="mini ${on?'on':''}" data-like="${p.id}">Me too · ${p.me+(on?1:0)}</button>
+    <button class="mini" data-hide="${p.id}">Report</button></div></article>`}).join('')||'<p class="sub">No posts yet. Be the first to share.</p>';
+}
+$('list').addEventListener('click',e=>{
+  const l=e.target.closest('[data-like]'),h=e.target.closest('[data-hide]');
+  if(l){const id=l.dataset.like;liked[id]=!liked[id];save('os_liked',liked);render()}
+  if(h){hidden[h.dataset.hide]=true;save('os_hidden',hidden);render()}
+});
+render();
+</script>
+</body>
+</html>
